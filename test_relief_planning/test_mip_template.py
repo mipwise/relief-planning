@@ -1,7 +1,6 @@
 import relief_planning
 import unittest
 import os
-from math import isclose
 import utils
 
 
@@ -16,21 +15,9 @@ class TestMipMe(unittest.TestCase):
     def test_1_action_data_ingestion(self):
         utils.check_data(self.dat, relief_planning.input_schema)
 
-    def test_2_action_data_prep(self):
-        old_sum = self.dat.sample_input_table['Data Field Two'].sum()
-        dat = relief_planning.action_data_prep.data_prep_solve(self.dat)
-        new_sum = dat.sample_input_table['Data Field Two'].sum()
-        close_enough = isclose(new_sum, self.params['Sample Float Parameter'] * old_sum, rel_tol=1e-2)
-        self.assertTrue(close_enough, "Data prep check")
-
-    def test_3_main_solve(self):
+    def test_2_main_solve(self):
         sln = relief_planning.solve(self.dat)
         self.assertSetEqual(set(sln.sample_output_table['Data Field']), {'Option 1', 'Option 2'}, 'Main solve check')
-
-    def test_4_action_report_builder(self):
-        sln = relief_planning.solve(self.dat)
-        sln = relief_planning.action_report_builder.report_builder_solve(self.dat, sln)
-        self.assertSetEqual(set(sln.sample_output_table['Data Field']), {'Option 1.0', 'Option 2.0'}, "Report check")
 
 
 if __name__ == '__main__':

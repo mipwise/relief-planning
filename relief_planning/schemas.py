@@ -75,39 +75,94 @@ text = {"strings_allowed": "*", "number_allowed": False}
 # region INPUT SCHEMA
 input_schema = PanDatFactory(
     parameters=[['Name'], ['Value']],  # Do not change the column names of the parameters table!
-    sample_input_table=[['Primary Key One', 'Primary Key Two'], ['Data Field One', 'Data Field Two']])
+    products=[['Product ID'], ['Product Name']],
+    suppliers=[['Supplier ID'], ['Supplier Name']],
+    relief_camps=[['Relief Camp ID'], ['Relief Camp Name']],
+    products_suppliers=[['Product ID', 'Supplier ID'], ['Available Qty']],
+    shipping_costs=[['Supplier ID', 'Relief Camp ID'], ['Cost']],
+    products_demands=[['Product ID', 'Relief Camp ID'], ['Demand Qty']])
 # endregion
 
 # region USER PARAMETERS
-input_schema.add_parameter('Sample Text Parameter', default_value='Any Text', number_allowed=False, strings_allowed='*')
-input_schema.add_parameter('Sample Two Values Parameter', default_value='Value 1', number_allowed=False,
-                           strings_allowed=['Value 1', 'Value 2'])
-input_schema.add_parameter('Sample Float Parameter', default_value=1.5, number_allowed=True, strings_allowed=(),
-                           must_be_int=False, min=0, inclusive_min=True, max=10, inclusive_max=True)
-input_schema.add_parameter('Sample Date Parameter', default_value='11/21/2022', datetime=True)
+input_schema.add_parameter('Solver', default_value='CBC', number_allowed=False,
+                           strings_allowed=['CBC', 'Gurobi PuLP'])
+input_schema.add_parameter('Time Limit', default_value=120, number_allowed=True, strings_allowed=(),
+                           must_be_int=False, min=0.0, inclusive_min=True, max=1 * 60 ** 2, inclusive_max=True)
+input_schema.add_parameter('MIP Gap', default_value=0.01, number_allowed=True, strings_allowed=(),
+                           min=0, inclusive_min=False, max=1, inclusive_max=False)
 # endregion
 
 # region OUTPUT SCHEMA
 output_schema = PanDatFactory(
-    sample_output_table=[['Primary Key'], ['Data Field']])
+    shipments=[['Product ID', 'Supplier ID', 'Relief Camp ID'], [
+        'Product Name', 'Supplier Name', 'Relief Camp Name', 'Shipped Qty']],
+    shortfalls=[['Product ID', 'Relief Camp ID'], [
+        'Product Name', 'Relief Camp Name', 'Shortfall Qty']])
 # endregion
 
 # region DATA TYPES AND PREDICATES - INPUT SCHEMA
-# region sample_input_table
-table = 'sample_input_table'
-input_schema.set_data_type(table=table, field='Primary Key One', number_allowed=False, strings_allowed='*')
-input_schema.set_data_type(table=table, field='Primary Key Two', number_allowed=False, strings_allowed='*')
-input_schema.set_data_type(table=table, field='Data Field One', number_allowed=False,
-                           strings_allowed=('Option 1', 'Option 2'))
-input_schema.set_data_type(table=table, field='Data Field Two', number_allowed=True, strings_allowed=())
+# region products
+table = 'products'
+input_schema.set_data_type(table=table, field='Product ID', **text)
+input_schema.set_data_type(table=table, field='Product Name', **text)
 # endregion
+
+# region suppliers
+table = 'suppliers'
+input_schema.set_data_type(table=table, field='Supplier ID', **text)
+input_schema.set_data_type(table=table, field='Supplier Name', **text)
+# endregion
+
+# region relief_camps
+table = 'relief_camps'
+input_schema.set_data_type(table=table, field='Relief Camp ID', **text)
+input_schema.set_data_type(table=table, field='Relief Camp Name', **text)
+# endregion
+
+# region products_suppliers
+table = 'products_suppliers'
+input_schema.set_data_type(table=table, field='Product ID', **text)
+input_schema.set_data_type(table=table, field='Supplier ID', **text)
+input_schema.set_data_type(table=table, field='Available Qty', **non_negative_float)
+input_schema.add_foreign_key(native_table=table, foreign_table='products', mappings=('Product ID', 'Product ID'))
+input_schema.add_foreign_key(native_table=table, foreign_table='suppliers', mappings=('Supplier ID', 'Supplier ID'))
+# endregion
+
+# region shipping_costs
+table = 'shipping_costs'
+input_schema.set_data_type(table=table, field='Supplier ID', **text)
+input_schema.set_data_type(table=table, field='Relief Camp ID', **text)
+input_schema.set_data_type(table=table, field='Cost', **non_negative_float)
+input_schema.add_foreign_key(native_table=table, foreign_table='suppliers', mappings=('Supplier ID', 'Supplier ID'))
+input_schema.add_foreign_key(native_table=table, foreign_table='relief_camps',
+                             mappings=('Relief Camp ID', 'Relief Camp ID'))
+# endregion
+
+# region products_demands
+table = 'products_demands'
+input_schema.set_data_type(table=table, field='Product ID', **text)
+input_schema.set_data_type(table=table, field='Relief Camp ID', **text)
+input_schema.set_data_type(table=table, field='Demand Qty', **non_negative_float)
+input_schema.add_foreign_key(native_table=table, foreign_table='products', mappings=('Product ID', 'Product ID'))
+input_schema.add_foreign_key(native_table=table, foreign_table='relief_camps',
+                             mappings=('Relief Camp ID', 'Relief Camp ID'))
+# endregion
+
 # endregion
 
 # region DATA TYPES AND PREDICATES - OUTPUT SCHEMA
-# region sample_output_table
-table = 'sample_output_table'
-output_schema.set_data_type(table=table, field='Primary Key', number_allowed=False, strings_allowed='*')
-output_schema.set_data_type(table=table, field='Data Field', number_allowed=False, strings_allowed='*')
+# region shipments
+table = 'shipments'
+for field in ['Product ID', 'Supplier ID', 'Relief Camp ID', 'Product Name', 'Supplier Name', 'Relief Camp Name']:
+    output_schema.set_data_type(table=table, field=field, **text)
+output_schema.set_data_type(table=table, field='Shipped Qty', **non_negative_float)
+# endregion
+
+# region shortfalls
+table = 'shortfalls'
+for field in ['Product ID', 'Relief Camp ID', 'Product Name', 'Relief Camp Name']:
+    output_schema.set_data_type(table=table, field=field, **text)
+output_schema.set_data_type(table=table, field='Shortfall Qty', **non_negative_float)
 # endregion
 # endregion
 

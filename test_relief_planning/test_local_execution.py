@@ -1,7 +1,6 @@
 import relief_planning
 import unittest
 import utils
-import os
 
 
 class TestLocalExecution(unittest.TestCase):
@@ -15,24 +14,13 @@ class TestLocalExecution(unittest.TestCase):
     """
 
     def test_1_action_data_ingestion(self):
-        dat = utils.read_data(os.path.join('testing_data', 'testing_data.json'), relief_planning.input_schema)
+        dat = utils.read_data('inputs/testing_data.xls', relief_planning.input_schema)
         utils.check_data(dat, relief_planning.input_schema)
         utils.write_data(dat, 'inputs', relief_planning.input_schema)
 
-    def test_2_action_data_prep(self):
-        dat = utils.read_data('inputs', relief_planning.input_schema)
-        dat = relief_planning.action_data_prep.data_prep_solve(dat)
-        utils.write_data(dat, 'inputs', relief_planning.input_schema)
-
-    def test_3_main_solve(self):
+    def test_2_main_solve(self):
         dat = utils.read_data('inputs', relief_planning.input_schema)
         sln = relief_planning.solve(dat)
-        utils.write_data(sln, 'outputs', relief_planning.output_schema)
-
-    def test_4_action_report_builder(self):
-        dat = utils.read_data('inputs', relief_planning.input_schema)
-        sln = utils.read_data('outputs', relief_planning.output_schema)
-        sln = relief_planning.action_report_builder.report_builder_solve(dat, sln)
         utils.write_data(sln, 'outputs', relief_planning.output_schema)
 
 
