@@ -1,5 +1,5 @@
-from mip_template import output_schema
-from mip_template import input_schema
+from relief_planning import output_schema
+from relief_planning import input_schema
 
 
 def solve(dat):

@@ -1,4 +1,4 @@
-from mip_template import input_schema
+from relief_planning import input_schema
 
 
 def data_prep_solve(dat):
