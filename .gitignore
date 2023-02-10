@@ -130,3 +130,5 @@ dmypy.json
 
 # Pycharm stuff
 .idea/
+/test_relief_planning/data/inputs/*.csv
+/test_relief_planning/data/outputs/*.csv

@@ -1,6 +1,7 @@
 import relief_planning
 import unittest
 import utils
+import os
 
 
 class TestLocalExecution(unittest.TestCase):
@@ -14,7 +15,7 @@ class TestLocalExecution(unittest.TestCase):
     """
 
     def test_1_action_data_ingestion(self):
-        dat = utils.read_data('inputs/testing_data.xls', relief_planning.input_schema)
+        dat = utils.read_data(os.path.join('testing_data', 'testing_data.json'), relief_planning.input_schema)
         utils.check_data(dat, relief_planning.input_schema)
         utils.write_data(dat, 'inputs', relief_planning.input_schema)
 

@@ -1,34 +1,112 @@
 {
   "parameters": [
     [
-      "Sample Text Parameter",
-      "Any Value"
+      "Solver",
+      "CBC"
     ],
     [
-      "Sample Two Values Parameter",
-      "Value 1"
+      "Time Limit",
+      120
     ],
     [
-      "Sample Float Parameter",
+      "MIP Gap",
+      0.01
+    ]
+  ],
+  "products": [
+    [
+      "W24-500",
+      "Pack 24 unit of water bottle 500ml"
+    ],
+    [
+      "R1Kg",
+      "Rice 1Kg"
+    ]
+  ],
+  "products_demands": [
+    [
+      "W24-500",
+      "EKZ",
+      2.5
+    ],
+    [
+      "R1Kg",
+      "EKZ",
+      3.5
+    ],
+    [
+      "W24-500",
+      "GZT",
+      4.5
+    ],
+    [
+      "R1Kg",
+      "GZT",
+      3.0
+    ]
+  ],
+  "products_suppliers": [
+    [
+      "W24-500",
+      "ISB",
+      4.5
+    ],
+    [
+      "R1Kg",
+      "ISB",
+      2.0
+    ],
+    [
+      "W24-500",
+      "ATY",
       1.5
     ],
     [
-      "Sample Date Parameter",
-      "2022-11-21 00:00:00"
+      "R1Kg",
+      "ATY",
+      3.5
     ]
   ],
-  "sample_input_table": [
+  "relief_camps": [
     [
-      "PK_a",
-      "PK_1",
-      "Option 1",
-      2.25
+      "EKZ",
+      "Ekinozu"
     ],
     [
-      "PK_b",
-      "PK_2",
-      "Option 2",
-      4.5
+      "GZT",
+      "Gaziantep"
+    ]
+  ],
+  "shipping_costs": [
+    [
+      "ISB",
+      "EKZ",
+      300
+    ],
+    [
+      "ISB",
+      "GZT",
+      350
+    ],
+    [
+      "ATY",
+      "EKZ",
+      140
+    ],
+    [
+      "ATY",
+      "GZT",
+      160
+    ]
+  ],
+  "suppliers": [
+    [
+      "ISB",
+      "Instanbu"
+    ],
+    [
+      "ATY",
+      "Antalya"
     ]
   ]
 }
