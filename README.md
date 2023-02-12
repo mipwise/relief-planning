@@ -1,5 +1,11 @@
 # Relief Planning
+This repository contains a solution developed to support the distribution of 
+goods to people impacted by the recent earthquake in Turkey.
 
+The initial mathematical optimization model implemented here recommends the 
+quantity of products that should be shipped from each supply location to each 
+relief camp (demand points) while minimizing the total shipping cost. Unmet 
+demand (due to insufficient supply) is reported as well. 
 
 ## Repository guide
 - [docs](docs): Hosts documentation (in addition to readme files and docstrings)
