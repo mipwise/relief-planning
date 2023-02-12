@@ -17,7 +17,9 @@ class TestMipMe(unittest.TestCase):
 
     def test_2_main_solve(self):
         sln = relief_planning.solve(self.dat)
-        self.assertSetEqual(set(sln.sample_output_table['Data Field']), {'Option 1', 'Option 2'}, 'Main solve check')
+        self.assertAlmostEqual(sln.shipments['Shipped Qty'].sum() + sln.shortfalls['Shortfall Qty'].sum(),
+                               self.dat.products_demands['Demand Qty'].sum(), 1e-4)
+        # TODO: implement more test cases
 
 
 if __name__ == '__main__':
