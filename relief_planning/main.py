@@ -9,21 +9,20 @@ def get_optimization_data(dat):
     I = list(dat.suppliers['Supplier ID'])
     J = list(dat.relief_camps['Relief Camp ID'])
     K = list(dat.products['Product ID'])
-    c = dict(zip(zip(dat.shipping_costs['Supplier ID'], dat.shipping_costs['Relief Camp ID']),
-                 dat.shipping_costs['Cost']))
     u = dict(zip(zip(dat.products_suppliers['Product ID'], dat.products_suppliers['Supplier ID']),
                  dat.products_suppliers['Available Qty']))
     d = dict(zip(zip(dat.products_demands['Product ID'], dat.products_demands['Relief Camp ID']),
                  dat.products_demands['Demand Qty']))
-    p = {(k, j): 2 * max([c.get((i, j), 0) for i in I]) for k, j in d.keys()}
-    x_keys = [(k, i, j) for k in K for i, j in c.keys() if (k, i) in u if (k, j) in d]
+    p = dict(zip(zip(dat.products_demands['Product ID'], dat.products_demands['Relief Camp ID']),
+                 dat.products_demands['Priority Factor']))
+    x_keys = [(k, i, j) for (k, i) in u for j in J if (k, j) in d]
     y_keys = [(k, j) for k, j in d.keys()]
-    return I, J, K, c, u, d, p, x_keys, y_keys
+    return I, J, K, u, d, p, x_keys, y_keys
 
 
 def solve(dat):
     params = input_schema.create_full_parameters_dict(dat)
-    I, J, K, c, u, d, p, x_keys, y_keys = get_optimization_data(dat)
+    I, J, K, u, d, p, x_keys, y_keys = get_optimization_data(dat)
 
     # Build optimization model
     mdl = pulp.LpProblem('relief_planing', sense=pulp.LpMinimize)
@@ -44,12 +43,10 @@ def solve(dat):
         mdl.addConstraint(lpSum(x[k, i, j] for j in J if (k, i, j) in x_keys) <= u[k, i], name=f'C2_{k}_{i}')
 
     # Defining objective function
-    # Shipment cost
-    shipment = lpSum(c[i, j] * x[k, i, j] for k, i, j in x_keys)
     # Shortfall
     shortfall = lpSum(p[k, j] * y[k, j] for k, j in y_keys)
     # Set objective function
-    mdl.setObjective(shipment + shortfall)
+    mdl.setObjective(shortfall)
 
     # Optimize and retrieve the solution
     if params['Solver'] == 'CBC':
@@ -63,7 +60,6 @@ def solve(dat):
     if status == 'Optimal':
         x_sol = [(k, i, j, var.value()) for (k, i, j), var in x.items() if var.value() > 1e-4]
         y_sol = [(k, j, var.value()) for (k, j), var in y.items() if var.value() > 1e-4]
-        print(f'Shipment Cost: {shipment.value()}')
         print(f'Shortfall Penalty: {shortfall.value()}')
     else:
         x_sol, y_sol = None, None

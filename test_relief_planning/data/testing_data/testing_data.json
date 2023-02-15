@@ -27,22 +27,26 @@
     [
       "W24-500",
       "EKZ",
-      2.5
+      2.5,
+      1
     ],
     [
       "R1Kg",
       "EKZ",
-      3.5
+      3.5,
+      2
     ],
     [
       "W24-500",
       "GZT",
-      4.5
+      4.5,
+      2
     ],
     [
       "R1Kg",
       "GZT",
-      3.0
+      3.0,
+      1
     ]
   ],
   "products_suppliers": [
@@ -75,28 +79,6 @@
     [
       "GZT",
       "Gaziantep"
-    ]
-  ],
-  "shipping_costs": [
-    [
-      "ISB",
-      "EKZ",
-      300
-    ],
-    [
-      "ISB",
-      "GZT",
-      350
-    ],
-    [
-      "ATY",
-      "EKZ",
-      140
-    ],
-    [
-      "ATY",
-      "GZT",
-      160
     ]
   ],
   "suppliers": [

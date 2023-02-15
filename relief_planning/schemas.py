@@ -79,8 +79,7 @@ input_schema = PanDatFactory(
     suppliers=[['Supplier ID'], ['Supplier Name']],
     relief_camps=[['Relief Camp ID'], ['Relief Camp Name']],
     products_suppliers=[['Product ID', 'Supplier ID'], ['Available Qty']],
-    shipping_costs=[['Supplier ID', 'Relief Camp ID'], ['Cost']],
-    products_demands=[['Product ID', 'Relief Camp ID'], ['Demand Qty']])
+    products_demands=[['Product ID', 'Relief Camp ID'], ['Demand Qty', 'Priority Factor']])
 # endregion
 
 # region USER PARAMETERS
@@ -128,21 +127,12 @@ input_schema.add_foreign_key(native_table=table, foreign_table='products', mappi
 input_schema.add_foreign_key(native_table=table, foreign_table='suppliers', mappings=('Supplier ID', 'Supplier ID'))
 # endregion
 
-# region shipping_costs
-table = 'shipping_costs'
-input_schema.set_data_type(table=table, field='Supplier ID', **text)
-input_schema.set_data_type(table=table, field='Relief Camp ID', **text)
-input_schema.set_data_type(table=table, field='Cost', **non_negative_float)
-input_schema.add_foreign_key(native_table=table, foreign_table='suppliers', mappings=('Supplier ID', 'Supplier ID'))
-input_schema.add_foreign_key(native_table=table, foreign_table='relief_camps',
-                             mappings=('Relief Camp ID', 'Relief Camp ID'))
-# endregion
-
 # region products_demands
 table = 'products_demands'
 input_schema.set_data_type(table=table, field='Product ID', **text)
 input_schema.set_data_type(table=table, field='Relief Camp ID', **text)
 input_schema.set_data_type(table=table, field='Demand Qty', **non_negative_float)
+input_schema.set_data_type(table=table, field='Priority Factor', **non_negative_float)
 input_schema.add_foreign_key(native_table=table, foreign_table='products', mappings=('Product ID', 'Product ID'))
 input_schema.add_foreign_key(native_table=table, foreign_table='relief_camps',
                              mappings=('Relief Camp ID', 'Relief Camp ID'))
