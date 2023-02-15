@@ -9,7 +9,7 @@ input_tables_config = {
     'hidden_tables': ['parameters'],
     'categories': {
         'Master Data': ['products', 'suppliers', 'relief_camps'],
-        'Supply and Demand': ['products_suppliers', 'shipping_costs', 'products_demands']
+        'Supply and Demand': ['products_suppliers', 'products_demands']
     },
     'order': [],
     'tables_display_names': {},
